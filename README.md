@@ -69,7 +69,7 @@ Para executar este projeto localmente, siga os passos abaixo:
 
 ---
 
-## 👩‍💻👨‍💻 Equipe
+## 👩‍💻 Equipe 👨‍💻
 
 * Mariana Veiga Dos Santos
 * Vitor Thomé
