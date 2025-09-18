@@ -1,4 +1,3 @@
-// Em: lib/src/presentation/screens/splash_screen.dart
 import 'package:flutter/material.dart';
 
 class SplashScreen extends StatefulWidget {

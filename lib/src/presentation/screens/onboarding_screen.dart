@@ -1,4 +1,3 @@
-// Em: lib/src/presentation/screens/onboarding_screen.dart
 import 'package:flutter/material.dart';
 import 'package:app_receitas_culinarias/src/presentation/widgets/onboarding_page_widget.dart';
 

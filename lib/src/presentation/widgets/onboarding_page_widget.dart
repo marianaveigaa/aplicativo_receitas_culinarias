@@ -1,4 +1,3 @@
-// Em: lib/src/presentation/widgets/onboarding_page_widget.dart
 import 'package:flutter/material.dart';
 
 class OnboardingPageWidget extends StatelessWidget {
@@ -35,7 +34,7 @@ class OnboardingPageWidget extends StatelessWidget {
             // softWrap é true por padrão, garantindo a quebra de linha
           ),
           const SizedBox(height: 16),
-          // Descrição
+
           Text(
             data['description']!,
             style: Theme.of(context).textTheme.bodyLarge,
