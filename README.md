@@ -71,8 +71,6 @@ Para executar este projeto localmente, siga os passos abaixo:
 
 ## 🧑‍💻 Equipe
 
-* [Seu Nome Completo]
-* [Nome do Integrante 2]
-* [Nome do Integrante 3]
-* [Nome do Integrante 4]
-* [Nome do Integrante 5]
+* Mariana Veiga Dos Santos
+* Vitor Thomé
+* João Vitor Herzer de Sousa
