@@ -1,12 +1,9 @@
-// Em: lib/src/presentation/screens/onboarding_screen.dart
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-// Importando os 3 widgets que vamos usar para compor as 4 páginas
 import '../widgets/consent_page.dart';
 import '../widgets/go_to_access_page.dart';
-import '../widgets/onboarding_page_widget.dart'; // O widget com as FOTOS
+import '../widgets/onboarding_page_widget.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -20,7 +17,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   int _currentPage = 0;
   bool? _marketingConsent;
 
-  // Dados para as suas duas primeiras páginas com fotos (do 1º trabalho)
   final List<Map<String, String>> _onboardingData = [
     {
       "image": "assets/images/onboarding1.png",
@@ -83,9 +79,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     ),
                   ),
                   Visibility(
-                    visible: _currentPage <
-                        2, // Visível apenas nas duas páginas com fotos
-                    maintainState: true, maintainAnimation: true,
+                    visible: _currentPage < 2,
+                    maintainState: true,
+                    maintainAnimation: true,
                     maintainSize: true,
                     child: TextButton(
                       onPressed: () => _pageController.animateToPage(
@@ -100,7 +96,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             ),
             Expanded(
               child: PageView.builder(
-                // Usando .builder para corrigir o bug do botão
                 controller: _pageController,
                 itemCount: totalPages,
                 onPageChanged: (page) => setState(() => _currentPage = page),

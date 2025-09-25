@@ -1,5 +1,3 @@
-// GARANTA QUE ESTE É O ÚNICO CONTEÚDO DO ARQUIVO
-
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -19,14 +17,12 @@ class _SplashScreenState extends State<SplashScreen> {
 
   // Função para verificar o status do onboarding e decidir a navegação
   Future<void> _checkOnboardingStatus() async {
-    // Usamos Future.microtask conforme solicitado para leitura assíncrona segura
     await Future.microtask(() async {
       final prefs = await SharedPreferences.getInstance();
       // Lê o valor. Se não existir, o padrão é 'false'.
       final bool onboardingCompleted =
           prefs.getBool('onboarding_completed') ?? false;
 
-      // Adicionamos um pequeno delay para a splash ser visível
       await Future.delayed(const Duration(seconds: 2));
 
       // Verificação de 'mounted' para garantir que o widget ainda está na tela
