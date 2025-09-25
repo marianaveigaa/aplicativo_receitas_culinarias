@@ -1,11 +1,12 @@
+// Em: lib/src/presentation/screens/onboarding_screen.dart
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+// Importando os 3 widgets que vamos usar para compor as 4 páginas
 import '../widgets/consent_page.dart';
 import '../widgets/go_to_access_page.dart';
-import '../widgets/how_it_works_page.dart';
-import '../widgets/welcome_page.dart';
+import '../widgets/onboarding_page_widget.dart'; // O widget com as FOTOS
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -17,30 +18,21 @@ class OnboardingScreen extends StatefulWidget {
 class _OnboardingScreenState extends State<OnboardingScreen> {
   final PageController _pageController = PageController();
   int _currentPage = 0;
-  bool?
-      _marketingConsent; // Começa como nulo para indicar que não foi escolhido
+  bool? _marketingConsent;
 
-  // Lista de páginas do onboarding
-  final List<Widget> _pages = [];
-
-  @override
-  void initState() {
-    super.initState();
-    // A lista é inicializada aqui para poder passar o método onConsentChanged
-    _pages.addAll([
-      const WelcomePage(),
-      const HowItWorksPage(),
-      ConsentPage(
-        marketingConsent: _marketingConsent,
-        onConsentChanged: (value) {
-          setState(() {
-            _marketingConsent = value;
-          });
-        },
-      ),
-      const GoToAccessPage(),
-    ]);
-  }
+  // Dados para as suas duas primeiras páginas com fotos (do 1º trabalho)
+  final List<Map<String, String>> _onboardingData = [
+    {
+      "image": "assets/images/onboarding1.png",
+      "title": "Descubra Novas Receitas",
+      "description": "Milhares de receitas deliciosas na palma da sua mão.",
+    },
+    {
+      "image": "assets/images/onboarding2.png",
+      "title": "Cozinhe com Facilidade",
+      "description": "Siga o passo a passo e prepare pratos incríveis.",
+    },
+  ];
 
   @override
   void dispose() {
@@ -50,9 +42,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   Future<void> _completeOnboarding() async {
     final prefs = await SharedPreferences.getInstance();
-    // Salva o consentimento (o padrão é false se não for escolhido)
     await prefs.setBool('marketing_consent', _marketingConsent ?? false);
-    // Marca o onboarding como concluído
     await prefs.setBool('onboarding_completed', true);
 
     if (mounted) {
@@ -60,64 +50,48 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     }
   }
 
-  void _onPageChanged(int page) {
-    setState(() {
-      _currentPage = page;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
-    // Verifica se o botão principal deve estar habilitado
-    // Na página de consentimento, só habilita se uma escolha foi feita
+    const int totalPages = 4;
+    final bool isFirstPage = _currentPage == 0;
+    final bool isLastPage = _currentPage == totalPages - 1;
+    final bool isConsentPage = _currentPage == 2;
+
     final bool isButtonEnabled =
-        _currentPage != 2 || (_currentPage == 2 && _marketingConsent != null);
+        !isConsentPage || (isConsentPage && _marketingConsent != null);
 
     return Scaffold(
       body: SafeArea(
         child: Column(
           children: [
-            // Botões "Pular" e "Voltar" no topo
             Padding(
               padding:
                   const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  // Botão Voltar
                   Visibility(
-                    visible:
-                        _currentPage > 0 && _currentPage < _pages.length - 1,
+                    visible: !isFirstPage && !isLastPage,
                     maintainState: true,
                     maintainAnimation: true,
                     maintainSize: true,
                     child: TextButton(
-                      onPressed: () {
-                        _pageController.previousPage(
+                      onPressed: () => _pageController.previousPage(
                           duration: const Duration(milliseconds: 300),
-                          curve: Curves.ease,
-                        );
-                      },
+                          curve: Curves.ease),
                       child: const Text('Voltar'),
                     ),
                   ),
-
-                  // Botão Pular
                   Visibility(
                     visible: _currentPage <
-                        2, // Visível antes da pág de consentimento
-                    maintainState: true,
-                    maintainAnimation: true,
+                        2, // Visível apenas nas duas páginas com fotos
+                    maintainState: true, maintainAnimation: true,
                     maintainSize: true,
                     child: TextButton(
-                      onPressed: () {
-                        // Pula diretamente para a página de consentimento
-                        _pageController.animateToPage(
-                          2,
+                      onPressed: () => _pageController.animateToPage(
+                          2, // Pula para a pág. de consentimento
                           duration: const Duration(milliseconds: 300),
-                          curve: Curves.ease,
-                        );
-                      },
+                          curve: Curves.ease),
                       child: const Text('Pular'),
                     ),
                   ),
@@ -125,68 +99,75 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               ),
             ),
             Expanded(
-              child: PageView(
+              child: PageView.builder(
+                // Usando .builder para corrigir o bug do botão
                 controller: _pageController,
-                onPageChanged: _onPageChanged,
-                children: _pages,
+                itemCount: totalPages,
+                onPageChanged: (page) => setState(() => _currentPage = page),
+                itemBuilder: (context, index) {
+                  switch (index) {
+                    case 0:
+                      return OnboardingPageWidget(data: _onboardingData[0]);
+                    case 1:
+                      return OnboardingPageWidget(data: _onboardingData[1]);
+                    case 2:
+                      return ConsentPage(
+                        marketingConsent: _marketingConsent,
+                        onConsentChanged: (value) {
+                          setState(() {
+                            _marketingConsent = value;
+                          });
+                        },
+                      );
+                    case 3:
+                      return const GoToAccessPage();
+                    default:
+                      return const SizedBox.shrink();
+                  }
+                },
               ),
             ),
-            // Indicador de progresso e botão de avançar
             Padding(
               padding: const EdgeInsets.all(24.0),
               child: Column(
                 children: [
-                  // DotsIndicator
                   Visibility(
-                    visible: _currentPage <
-                        _pages.length - 1, // Oculto na última página
+                    visible: !isLastPage,
                     child: DotsIndicator(
-                      dotsCount: _pages.length,
+                      dotsCount: totalPages,
                       position: _currentPage,
                       decorator: DotsDecorator(
                         activeColor: Theme.of(context).colorScheme.primary,
+                        // ignore: deprecated_member_use
                         color: Theme.of(context)
                             .colorScheme
                             .onSurface
                             // ignore: deprecated_member_use
                             .withOpacity(0.3),
-                        size: const Size.square(9.0),
-                        activeSize: const Size(18.0, 9.0),
-                        activeShape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5.0),
-                        ),
                       ),
                     ),
                   ),
                   const SizedBox(height: 24),
-
-                  // Botão Avançar / Finalizar
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
-                      // Desabilitado se não for válido
                       onPressed: isButtonEnabled
                           ? () {
-                              if (_currentPage < _pages.length - 1) {
+                              if (!isLastPage) {
                                 _pageController.nextPage(
-                                  duration: const Duration(milliseconds: 300),
-                                  curve: Curves.ease,
-                                );
+                                    duration: const Duration(milliseconds: 300),
+                                    curve: Curves.ease);
                               } else {
                                 _completeOnboarding();
                               }
                             }
                           : null,
-                      child: Text(
-                        _currentPage < _pages.length - 1
-                            ? 'Avançar'
-                            : 'Ir para o Acesso',
-                      ),
+                      child: Text(isLastPage ? 'Ir para o Acesso' : 'Avançar'),
                     ),
                   ),
                 ],
               ),
-            ),
+            )
           ],
         ),
       ),

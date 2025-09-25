@@ -13,17 +13,12 @@ class GoToAccessPage extends StatelessWidget {
         children: [
           Icon(Icons.check_circle_outline, size: 80, color: Colors.green),
           SizedBox(height: 24),
-          Text(
-            'Tudo Pronto!',
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-          ),
+          Text('Tudo Pronto!',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
           SizedBox(height: 16),
-          Text(
-            'Você concluiu a introdução. Clique abaixo para começar a explorar o mundo das receitas!',
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 16),
-          ),
+          Text('Clique abaixo para começar a explorar o mundo das receitas!',
+              textAlign: TextAlign.center, style: TextStyle(fontSize: 16)),
         ],
       ),
     );
