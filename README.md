@@ -1,13 +1,16 @@
-# App de Receitas Culinárias - Fluxo Inicial
+# App de Receitas Culinárias - Fluxo de Primeira Execução
 
 ## 📚 Visão Geral do Projeto
 
-Este projeto foi desenvolvido como parte da Atividade Integrada 4 para a disciplina de Desenvolvimento de Aplicações para Dispositivos Móveis. O objetivo é implementar o fluxo inicial completo de um aplicativo em Flutter, seguindo as melhores práticas de UX/UI e estabelecendo as bases para conformidade com a LGPD.
+Este projeto, desenvolvido para a disciplina de Desenvolvimento de Aplicações para Dispositivos Móveis, é uma implementação completa e robusta do fluxo de primeira execução de um aplicativo em Flutter.
 
-O fluxo implementado consiste em três etapas principais:
-1.  **Launch Screen Nativa:** Uma tela de abertura profissional que melhora a primeira impressão do usuário.
-2.  **Splash Screen (Flutter):** Uma tela de carregamento com a identidade visual do app.
-3.  **Onboarding Interativo:** Uma sequência de duas telas de boas-vindas que o usuário pode navegar por gestos.
+A aplicação foi evoluída para incluir não apenas uma interface de boas-vindas visualmente agradável, mas também uma lógica inteligente que personaliza a experiência do usuário desde o primeiro acesso, utilizando persistência de dados local.
+
+O fluxo implementado consiste em:
+1.  **Launch Screen Nativa:** Uma tela de abertura profissional para uma excelente primeira impressão.
+2.  **Splash Screen Inteligente:** Uma tela de carregamento que verifica se o usuário já viu o onboarding e o direciona para a tela correta.
+3.  **Onboarding Interativo de 4 Páginas:** Uma sequência de telas que apresenta o app, explica seu funcionamento, coleta o consentimento de marketing (preparação para LGPD) e finaliza o processo.
+4.  **Persistência de Dados:** Uso de `SharedPreferences` para "lembrar" as escolhas do usuário e garantir que o onboarding seja exibido apenas uma vez.
 
 **Tema Escolhido:** Receitas Culinárias.
 
@@ -15,15 +18,18 @@ O fluxo implementado consiste em três etapas principais:
 
 ## 🛠️ Tecnologias e Widgets Utilizados
 
-A seguir, uma lista das principais ferramentas e widgets do Flutter que foram essenciais para a construção deste projeto:
+A seguir, uma lista das principais ferramentas e conceitos aplicados neste projeto:
 
-* **`flutter_native_splash`**: Pacote utilizado para criar a launch screen nativa, eliminando a "tela branca" inicial e proporcionando uma experiência de carregamento mais profissional.
-* **`StatefulWidget`**: Usado na Splash Screen e na Onboarding Screen para gerenciar estados internos, como o timer de navegação e a página atual do carrossel.
-* **Rotas Nomeadas (`MaterialApp`)**: Toda a navegação foi estruturada com rotas nomeadas (`/`, `/onboarding`, `/home`) para tornar o fluxo explícito e fácil de manter.
-* **`Navigator.pushReplacementNamed`**: Método de navegação utilizado para garantir um fluxo unidirecional, impedindo que o usuário retorne para as telas de Splash e Onboarding.
-* **`PageView` com `PageController`**: Componentes centrais para a criação do carrossel de onboarding interativo, permitindo a navegação por gestos de swipe.
-* **Layouts Essenciais (`Scaffold`, `SafeArea`, `Padding`)**: Estrutura base para garantir que a UI se adapte a diferentes telas e evite áreas como notches e barras de sistema, além de manter um espaçamento visualmente agradável.
-* **`ClipRRect`**: Widget utilizado para aplicar bordas arredondadas às imagens, conferindo um design mais moderno e profissional à interface.
+* **`shared_preferences`**: Pacote essencial para persistência de dados local. Usado para salvar se o onboarding foi concluído e a preferência de marketing do usuário.
+* **`dots_indicator`**: Biblioteca utilizada para criar o indicador de progresso visual (`DotsIndicator`) durante o onboarding, melhorando a clareza e a UX.
+* **`Future`, `async`, `await`**: Conceitos fundamentais de programação assíncrona, utilizados na Splash Screen para ler os dados do `SharedPreferences` sem travar a interface.
+* **`flutter_native_splash`**: Pacote para a criação da launch screen nativa, eliminando a "tela branca" inicial.
+* **`StatefulWidget`**: Utilizado para gerenciar estados complexos, como a página atual do onboarding e a escolha do usuário na tela de consentimento.
+* **Rotas Nomeadas (`MaterialApp`)**: Estrutura de navegação centralizada para um fluxo explícito e de fácil manutenção (`/`, `/onboarding`, `/home`).
+* **`Navigator.pushReplacementNamed`**: Método de navegação que garante um fluxo unidirecional, impedindo que o usuário retorne para as telas de introdução.
+* **`PageView` com `PageController`**: Componentes centrais para a criação do carrossel de onboarding.
+* **`Visibility`**: Widget crucial para implementar os **controles contextuais**, mostrando ou ocultando botões como "Pular" e "Voltar" apenas quando fazem sentido na jornada do usuário.
+* **`ClipRRect`**: Utilizado para aplicar bordas arredondadas às imagens, conferindo um design mais moderno à interface.
 
 ---
 
@@ -32,9 +38,9 @@ A seguir, uma lista das principais ferramentas e widgets do Flutter que foram es
 Para executar este projeto localmente, siga os passos abaixo:
 
 **Pré-requisitos:**
-* Ter o Flutter SDK instalado.
+* Ter o Flutter SDK (versão estável mais recente) instalado.
 * Ter um emulador Android/iOS configurado ou um dispositivo físico conectado.
-* Alternativamente, ter o Google Chrome para rodar a versão web.
+* Ter o Google Chrome para rodar a versão web.
 
 **Passos:**
 
@@ -53,7 +59,7 @@ Para executar este projeto localmente, siga os passos abaixo:
     flutter pub get
     ```
 
-4.  **Gere a Splash Screen Nativa:**
+4.  **Gere a Splash Screen Nativa (se necessário):**
     ```bash
     flutter pub run flutter_native_splash:create
     ```
@@ -62,15 +68,14 @@ Para executar este projeto localmente, siga os passos abaixo:
     ```bash
     flutter run
     ```
-    *Para executar especificamente no Chrome:*
+    *Para executar especificamente no Chrome (recomendado):*
     ```bash
-    flutter run -d chrome
+    flutter run -d chrome --web-renderer html
     ```
-
 ---
 
-## 👩‍💻 Equipe 👨‍💻
+## 👩🏻‍💻 Feito Por: 👨🏻‍💻
 
 * Mariana Veiga Dos Santos
 * Vitor Thomé
-* João Vitor Herzer de Sousa
+* João Vitor Herzer De Sousa
